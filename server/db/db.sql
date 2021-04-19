@@ -7,3 +7,6 @@ create table restaurants(
 
 insert into restaurants(name,location,price_range) values('halal restaurant','egypt',3);
 insert into restaurants(name,location,price_range) values('pizza hut','cairo',4);
+
+
+update restaurants set name = 'some restaurant' where id = 4;

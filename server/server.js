@@ -55,16 +55,32 @@ app.post('/api/v1/restaurants', async(req,res) => {
    }
 })
 
-app.put('/api/v1/restaurants/:id', (req,res) => {
-    console.log(req.params.id)
-    res.status(200).json({
-        name: 'asmo'
-    })
+app.put('/api/v1/restaurants/:id', async(req,res) => {
+     const {name,location,price_range} = req.body
+     const {id} = req.params
+      try{
+       const {rows:[row]} = await db.query('update restaurants set name = $1, location = $2, price_range = $3 where id = $4 returning *;', [name,location,price_range,id])
+    res.json({
+        resStatus: 'success',
+        restaurant: row
+    }).status(200);
+   }
+   catch(e){
+    res.send(e.message)
+   }
 })
 
-app.delete('/api/v1/restaurants/:id', (req,res) => {
-    console.log(req.params.id)
-    res.status(204)
+app.delete('/api/v1/restaurants/:id', async(req,res) => {
+     const {id} = req.params
+      try{
+       const {rows} = await db.query('delete from restaurants where id = $1;', [id])
+    res.json({
+        resStatus: 'success',
+    }).status(204);
+   }
+   catch(e){
+    res.send(e.message)
+   }
 })
 
 app.listen(PORT, ()=> {`server is running on ${PORT}`})
